@@ -18,7 +18,7 @@ zip -r auth_handler.zip . || { echo "Failed to zip auth_handler"; exit 1; }
 mv auth_handler.zip ../auth_handler/
 
 # Build chat_processor
-cd ../
+cd -
 cp chat_processor/chat_processor.py "$TEMP_CHAT"
 cp chat_processor/llm_config.py "$TEMP_CHAT"
 cp utils.py "$TEMP_CHAT"
@@ -29,7 +29,7 @@ zip -r chat_processor.zip . || { echo "Failed to zip chat_processor"; exit 1; }
 mv chat_processor.zip ../chat_processor/
 
 # Build history_manager
-cd ../
+cd -
 cp history_manager/history_manager.py "$TEMP_HISTORY"
 cp utils.py "$TEMP_HISTORY"
 cp history_manager/requirements.txt "$TEMP_HISTORY"
@@ -39,7 +39,7 @@ zip -r history_manager.zip . || { echo "Failed to zip history_manager"; exit 1; 
 mv history_manager.zip ../history_manager/
 
 # Clean up temporary directories
-cd ../
+cd -
 rm -rf "$TEMP_AUTH" "$TEMP_CHAT" "$TEMP_HISTORY"
 
 echo "Lambda deployment packages created: auth_handler/auth_handler.zip, chat_processor/chat_processor.zip, history_manager/history_manager.zip"
