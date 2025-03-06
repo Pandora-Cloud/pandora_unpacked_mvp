@@ -40,15 +40,6 @@ resource "aws_cognito_identity_pool" "chat_identity_pool" {
   allow_unauthenticated_identities = true
 }
 
-resource "aws_cognito_identity_pool_roles_attachment" "chat_roles" {
-  identity_pool_id = aws_cognito_identity_pool.chat_identity_pool.id
-
-  roles = {
-    "authenticated"   = var.authenticated_role_arn
-    "unauthenticated" = var.unauthenticated_role_arn
-  }
-}
-
 resource "aws_ssm_parameter" "user_pool_id" {
   name  = "/${var.project_name}/cognito-user-pool-id"
   type  = "SecureString"

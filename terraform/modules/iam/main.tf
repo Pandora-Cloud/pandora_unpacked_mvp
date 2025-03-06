@@ -73,7 +73,7 @@ resource "aws_iam_role" "authenticated_role" {
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringEquals = {
-          "cognito-identity.amazonaws.com:aud" = module.auth.identity_pool_id
+          "cognito-identity.amazonaws.com:aud" = var.identity_pool_id
         }
         "ForAnyValue:StringLike" = {
           "cognito-identity.amazonaws.com:amr" = "authenticated"
@@ -98,4 +98,52 @@ resource "aws_iam_role_policy" "authenticated_policy" {
       }
     ]
   })
+}
+
+  resource "aws_iam_role" "unauthenticated_role" {
+  name = "${var.project_name}-unauthenticated-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = "cognito-identity.amazonaws.com"
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "cognito-identity.amazonaws.com:aud" = var.identity_pool_id
+        }
+        "ForAnyValue:StringLike" = {
+          "cognito-identity.amazonaws.com:amr" = "unauthenticated"
+        }
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "unauthenticated_policy" {
+  role = aws_iam_role.unauthenticated_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-identity:GetId"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Add to terraform/modules/iam/main.tf:
+resource "aws_cognito_identity_pool_roles_attachment" "chat_roles" {
+  identity_pool_id = var.identity_pool_id
+
+  roles = {
+    "authenticated"   = aws_iam_role.authenticated_role.arn
+    "unauthenticated" = aws_iam_role.unauthenticated_role.arn
+  }
 }

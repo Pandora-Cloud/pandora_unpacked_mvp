@@ -14,3 +14,12 @@ variable "dynamodb_table" {
 variable "dlq_arn" {
   type = string
 }
+
+variable "user_pool_arn" {
+  type = string
+}
+
+variable "cert_arn" {
+  type = string
+  description = "The ARN of the ACM certificate"
+}

@@ -204,12 +204,7 @@ resource "aws_api_gateway_authorizer" "cognito" {
   name          = "${var.project_name}-cognito-authorizer"
   rest_api_id   = aws_api_gateway_rest_api.chat_api.id
   type          = "COGNITO_USER_POOLS"
-  provider_arns = [module.auth.user_pool_arn]
-}
-
-resource "aws_api_gateway_domain_name" "api" {
-  domain_name              = "chat.pandoracloud.net"
-  regional_certificate_arn = module.networking.cert_arn
+  provider_arns = [var.user_pool_arn]
 }
 
 resource "aws_api_gateway_deployment" "chat_deployment" {
@@ -238,4 +233,9 @@ resource "aws_api_gateway_usage_plan" "chat_plan" {
     burst_limit = 100
     rate_limit  = 50
   }
+}
+
+resource "aws_api_gateway_domain_name" "api" {
+  domain_name              = "chat.pandoracloud.net"
+  regional_certificate_arn = var.cert_arn
 }

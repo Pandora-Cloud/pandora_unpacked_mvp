@@ -27,6 +27,13 @@ resource "aws_wafv2_web_acl" "api_protection" {
       metric_name                = "RateLimit"
     }
   }
+  
+  # Add this top-level visibility_config block
+  visibility_config {
+    sampled_requests_enabled   = true
+    cloudwatch_metrics_enabled = true
+    metric_name                = "${var.project_name}-web-acl-metric"
+  }
 }
 
 resource "aws_wafv2_web_acl_association" "api" {

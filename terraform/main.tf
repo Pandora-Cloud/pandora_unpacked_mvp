@@ -10,14 +10,17 @@ module "compute" {
   lambda_role_arn  = module.iam.lambda_exec_arn
   dynamodb_table   = module.storage.chat_history_table_name
   dlq_arn          = module.storage.dlq_arn
+  user_pool_arn    = module.auth.user_pool_arn
+  cert_arn         = module.networking.cert_arn
 }
 
 module "iam" {
-  source         = "./modules/iam"
-  project_name   = var.project_name
-  region         = var.region
-  dynamodb_table = module.storage.chat_history_table_name
-  dlq_arn        = module.storage.dlq_arn
+  source           = "./modules/iam"
+  project_name     = var.project_name
+  region           = var.region
+  dynamodb_table   = module.storage.chat_history_table_name
+  dlq_arn          = module.storage.dlq_arn
+  identity_pool_id = module.auth.identity_pool_id
 }
 
 module "monitoring" {
@@ -26,7 +29,10 @@ module "monitoring" {
 }
 
 module "networking" {
-  source = "./modules/networking"
+  source            = "./modules/networking"
+  api_domain_name   = module.compute.api_domain_name
+  api_hosted_zone_id = module.compute.api_hosted_zone_id
+  api_id            = module.compute.api_id
 }
 
 module "security" {
