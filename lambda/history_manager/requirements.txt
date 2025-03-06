@@ -1,0 +1,2 @@
+# lambda/history_manager/requirements.txt
+boto3

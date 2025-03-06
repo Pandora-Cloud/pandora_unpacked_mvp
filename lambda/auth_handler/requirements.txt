@@ -1,0 +1,2 @@
+# lambda/auth_handler/requirements.txt
+boto3

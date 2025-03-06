@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot MVP - Chat</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- AWS Amplify for authentication -->
+    <script src="https://unpkg.com/aws-amplify@5.0.0/dist/aws-amplify.min.js"></script>
+    <!-- Load env.js for Cognito config -->
+    <script src="js/env.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/chat.js"></script>
+</head>
+<body>
+    <div id="chat-container">
+        <h1>Chat</h1>
+        <select id="llm">
+            <option value="titan-text-express-v1">Titan Text Express</option>
+        </select>
+        <div id="chat-history"></div>
+        <input type="text" id="message" placeholder="Type a message">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="logout()">Logout</button>
+        <p id="chat-error" style="color: red;"></p>
+    </div>
+    <script>
+        // Redirect to login if not authenticated
+        if (!localStorage.getItem('idToken')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

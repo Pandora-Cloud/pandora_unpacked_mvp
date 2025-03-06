@@ -1,0 +1,3 @@
+# lambda/chat_processor/requirements.txt
+boto3
+pybreaker

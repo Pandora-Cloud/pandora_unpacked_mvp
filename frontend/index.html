@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot MVP - Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- AWS Amplify for authentication -->
+    <script src="https://unpkg.com/aws-amplify@5.0.0/dist/aws-amplify.min.js"></script>
+    <!-- Load env.js for Cognito config -->
+    <script src="js/env.js"></script>
+    <script src="js/auth.js"></script>
+</head>
+<body>
+    <div id="login-container">
+        <h1>Login</h1>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-error" style="color: red;"></p>
+    </div>
+</body>
+</html>
