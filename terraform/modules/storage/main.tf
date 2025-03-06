@@ -9,7 +9,7 @@ resource "aws_s3_bucket_cors_configuration" "frontend_cors" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET", "HEAD"]
-    allowed_origins = ["https://chat.pandoracloud.net"]
+    allowed_origins = ["https://chat.dev.pandoracloud.net"]
     max_age_seconds = 3000
   }
 }

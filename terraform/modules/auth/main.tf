@@ -31,8 +31,8 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code", "implicit"]
   allowed_oauth_scopes                 = ["email", "openid", "profile"]
-  callback_urls                        = ["https://chat.pandoracloud.net/callback"]
-  logout_urls                          = ["https://chat.pandoracloud.net/logout"]
+  callback_urls = ["https://chat.dev.pandoracloud.net/callback"]
+  logout_urls   = ["https://chat.dev.pandoracloud.net/logout"]
 }
 
 resource "aws_cognito_identity_pool" "chat_identity_pool" {

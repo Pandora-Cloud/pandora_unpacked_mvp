@@ -194,7 +194,7 @@ resource "aws_api_gateway_integration_response" "options_integration_response" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
     "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST,GET'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'https://chat.pandoracloud.net'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'https://chat.dev.pandoracloud.net'"
   }
   depends_on = [aws_api_gateway_integration.options_integration]
 }
@@ -236,6 +236,6 @@ resource "aws_api_gateway_usage_plan" "chat_plan" {
 }
 
 resource "aws_api_gateway_domain_name" "api" {
-  domain_name              = "chat.pandoracloud.net"
+  domain_name              = "chat.dev.pandoracloud.net"
   regional_certificate_arn = var.cert_arn
 }

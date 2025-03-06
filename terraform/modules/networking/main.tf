@@ -1,10 +1,10 @@
 # terraform/modules/networking/main.tf
 data "aws_route53_zone" "existing" {
-  name = "pandoracloud.net."
+  name = "dev.pandoracloud.net."
 }
 
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "chat.pandoracloud.net"
+  domain_name       = "chat.dev.pandoracloud.net"
   validation_method = "DNS"
 }
 
@@ -25,7 +25,7 @@ resource "aws_route53_record" "cert_validation" {
 
 resource "aws_route53_record" "custom_domain" {
   zone_id = data.aws_route53_zone.existing.zone_id
-  name    = "chat.pandoracloud.net"
+  name    = "chat.dev.pandoracloud.net"
   type    = "A"
   alias {
     name                   = var.api_domain_name
