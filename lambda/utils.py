@@ -3,6 +3,7 @@ import json
 import logging
 import boto3
 from botocore.config import Config
+import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

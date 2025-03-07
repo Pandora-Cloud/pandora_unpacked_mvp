@@ -26,15 +26,40 @@ if grep -q 'window.REACT_APP_USER_POOL_ID = ""' "$SOURCE_DIR/js/env.js"; then
     fi
 fi
 
-# Sync files to S3 with appropriate content types
-echo "Deploying frontend to s3://$BUCKET_NAME..."
+# Sync files to S3 with appropriate content types - one type at a time for clarity
+echo "Deploying frontend to s3://$BUCKET_NAME/..."
+
+# HTML files
 aws s3 sync "$SOURCE_DIR/" "s3://$BUCKET_NAME/" \
     --region "$REGION" \
+    --include "*.html" \
     --exclude "*" \
-    --include "*.html" --content-type "text/html" \
-    --include "*.css" --content-type "text/css" \
-    --include "*.js" --content-type "application/javascript" \
-    || { echo "Failed to sync files to S3"; exit 1; }
+    --content-type "text/html" \
+    --acl public-read
+
+# CSS files
+aws s3 sync "$SOURCE_DIR/" "s3://$BUCKET_NAME/" \
+    --region "$REGION" \
+    --include "*.css" \
+    --exclude "*" \
+    --content-type "text/css" \
+    --acl public-read
+
+# JavaScript files
+aws s3 sync "$SOURCE_DIR/" "s3://$BUCKET_NAME/" \
+    --region "$REGION" \
+    --include "*.js" \
+    --exclude "*" \
+    --content-type "application/javascript" \
+    --acl public-read
+
+# Other files (images, etc.)
+aws s3 sync "$SOURCE_DIR/" "s3://$BUCKET_NAME/" \
+    --region "$REGION" \
+    --exclude "*.html" \
+    --exclude "*.css" \
+    --exclude "*.js" \
+    --acl public-read
 
 # Configure S3 bucket for static website hosting (if not already set)
 echo "Configuring S3 bucket for static website hosting..."
@@ -48,4 +73,4 @@ aws s3 website "s3://$BUCKET_NAME/" \
 ENDPOINT="http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
 echo "Frontend deployed successfully!"
 echo "Test it at: $ENDPOINT"
-echo "Note: If using a custom domain (e.g., https://chat.pandoracloud.net), ensure CloudFront is configured separately."
+echo "Note: If using a custom domain (e.g., https://chat.pandoracloud.net), ensure CloudFront is configured correctly."

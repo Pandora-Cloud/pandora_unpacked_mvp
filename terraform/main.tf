@@ -49,3 +49,14 @@ module "storage" {
   project_name     = var.project_name
   kms_key_arn      = module.security.kms_key_arn
 }
+
+module "cdn" {
+  source = "./modules/cdn"
+  
+  project_name                   = var.project_name
+  s3_bucket_id                   = module.storage.frontend_bucket_id
+  s3_bucket_arn                  = module.storage.frontend_bucket_arn
+  s3_bucket_regional_domain_name = module.storage.frontend_bucket_regional_domain_name
+  certificate_arn                = module.networking.cloudfront_cert_arn
+  zone_id                        = module.networking.zone_id
+}

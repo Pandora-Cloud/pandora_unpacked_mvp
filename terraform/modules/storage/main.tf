@@ -14,6 +14,18 @@ resource "aws_s3_bucket_cors_configuration" "frontend_cors" {
   }
 }
 
+resource "aws_s3_bucket_website_configuration" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  
+  index_document {
+    suffix = "index.html"
+  }
+  
+  error_document {
+    key = "index.html"
+  }
+}
+
 resource "aws_dynamodb_table" "chat_history" {
   name           = "${var.project_name}-ChatHistory"
   billing_mode   = "PAY_PER_REQUEST"
