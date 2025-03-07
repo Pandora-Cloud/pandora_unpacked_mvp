@@ -1,17 +1,18 @@
-# Create an Origin Access Identity for CloudFront
-resource "aws_cloudfront_origin_access_identity" "oai" {
-  comment = "OAI for ${var.project_name} frontend"
+# Create an Origin Access Control for CloudFront
+resource "aws_cloudfront_origin_access_control" "oac" {
+  name                              = "${var.project_name}-oac"
+  description                       = "OAC for ${var.project_name} frontend"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 # Create the CloudFront distribution
 resource "aws_cloudfront_distribution" "frontend" {
   origin {
-    domain_name = var.s3_bucket_regional_domain_name
-    origin_id   = "S3-${var.project_name}-frontend"
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
-    }
+    domain_name              = var.s3_bucket_regional_domain_name
+    origin_id                = "S3-${var.project_name}-frontend"
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
   enabled             = true
@@ -37,6 +38,7 @@ resource "aws_cloudfront_distribution" "frontend" {
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
+    compress               = true
   }
 
   custom_error_response {
@@ -64,7 +66,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 }
 
-# Create an S3 bucket policy that allows CloudFront OAI access
+# Create an S3 bucket policy that allows CloudFront OAC access
 resource "aws_s3_bucket_policy" "frontend" {
   bucket = var.s3_bucket_id
 
@@ -72,15 +74,24 @@ resource "aws_s3_bucket_policy" "frontend" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = "s3:GetObject"
-        Effect   = "Allow"
-        Resource = "${var.s3_bucket_arn}/*"
+        Sid       = "AllowCloudFrontServicePrincipalReadOnly"
+        Effect    = "Allow"
         Principal = {
-          AWS = aws_cloudfront_origin_access_identity.oai.iam_arn
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action    = "s3:GetObject"
+        Resource  = "${var.s3_bucket_arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.frontend.arn
+          }
         }
       }
     ]
   })
+
+  # Make sure the policy is applied after the CloudFront distribution is created
+  depends_on = [aws_cloudfront_distribution.frontend]
 }
 
 # Create a Route53 record for the CloudFront distribution
