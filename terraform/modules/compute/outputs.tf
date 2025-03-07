@@ -16,3 +16,15 @@ output "api_domain_name" {
 output "api_hosted_zone_id" {
   value = aws_api_gateway_domain_name.api.regional_zone_id
 }
+
+output "stage_name" {
+  value = "prod"
+}
+
+output "api_gateway_domain_regional_domain_name" {
+  value = aws_api_gateway_domain_name.api.regional_domain_name
+}
+
+output "api_gateway_domain_regional_zone_id" {
+  value = aws_api_gateway_domain_name.api.regional_zone_id
+}

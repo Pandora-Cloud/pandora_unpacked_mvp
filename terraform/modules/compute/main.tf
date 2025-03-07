@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "chat_processor" {
-  filename      = "lambda/chat_processor.zip"
+  filename      = "${path.module}/../../../lambda/chat_processor.zip"
   function_name = "${var.project_name}-chatProcessor"
   role          = var.lambda_role_arn
   handler       = "chat_processor.handler"
@@ -19,7 +19,7 @@ resource "aws_lambda_function" "chat_processor" {
 }
 
 resource "aws_lambda_function" "auth_handler" {
-  filename      = "lambda/auth_handler.zip"
+  filename      = "${path.module}/../../../lambda/auth_handler.zip"
   function_name = "${var.project_name}-authHandler"
   role          = var.lambda_role_arn
   handler       = "auth_handler.handler"
@@ -38,7 +38,7 @@ resource "aws_lambda_function" "auth_handler" {
 }
 
 resource "aws_lambda_function" "history_manager" {
-  filename      = "lambda/history_manager.zip"
+  filename      = "${path.module}/../../../lambda/history_manager.zip"
   function_name = "${var.project_name}-historyManager"
   role          = var.lambda_role_arn
   handler       = "history_manager.handler"
@@ -238,4 +238,7 @@ resource "aws_api_gateway_usage_plan" "chat_plan" {
 resource "aws_api_gateway_domain_name" "api" {
   domain_name              = "chat.dev.pandoracloud.net"
   regional_certificate_arn = var.cert_arn
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }

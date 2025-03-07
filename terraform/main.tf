@@ -33,12 +33,15 @@ module "networking" {
   api_domain_name   = module.compute.api_domain_name
   api_hosted_zone_id = module.compute.api_hosted_zone_id
   api_id            = module.compute.api_id
+  api_gateway_domain_regional_domain_name = module.compute.api_gateway_domain_regional_domain_name
+  api_gateway_domain_regional_zone_id = module.compute.api_gateway_domain_regional_zone_id
 }
 
 module "security" {
   source       = "./modules/security"
   project_name = var.project_name
   api_arn      = module.compute.api_arn
+  stage_name   = module.compute.stage_name
 }
 
 module "storage" {

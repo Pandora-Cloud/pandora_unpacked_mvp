@@ -5,3 +5,7 @@ variable "project_name" {
 variable "api_arn" {
   type = string
 }
+
+variable "stage_name" {
+  type = string
+}

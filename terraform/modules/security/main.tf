@@ -36,7 +36,8 @@ resource "aws_wafv2_web_acl" "api_protection" {
   }
 }
 
+# To something like this (exact code depends on your variables):
 resource "aws_wafv2_web_acl_association" "api" {
-  resource_arn = var.api_arn
+  resource_arn = "${var.api_arn}/stages/${var.stage_name}"
   web_acl_arn  = aws_wafv2_web_acl.api_protection.arn
 }

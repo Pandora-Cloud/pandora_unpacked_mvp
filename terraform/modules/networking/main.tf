@@ -28,8 +28,8 @@ resource "aws_route53_record" "custom_domain" {
   name    = "chat.dev.pandoracloud.net"
   type    = "A"
   alias {
-    name                   = var.api_domain_name
-    zone_id                = var.api_hosted_zone_id
-    evaluate_target_health = false
+    name                   = var.api_gateway_domain_regional_domain_name
+    zone_id                = var.api_gateway_domain_regional_zone_id
+    evaluate_target_health = true
   }
 }

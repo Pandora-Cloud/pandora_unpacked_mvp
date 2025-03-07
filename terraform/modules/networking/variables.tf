@@ -13,3 +13,13 @@ variable "api_hosted_zone_id" {
   type = string
   description = "The hosted zone ID for the API Gateway domain"
 }
+
+variable "api_gateway_domain_regional_domain_name" {
+  description = "Regional domain name for API Gateway"
+  type        = string
+}
+
+variable "api_gateway_domain_regional_zone_id" {
+  description = "Regional zone ID for API Gateway"
+  type        = string
+}
